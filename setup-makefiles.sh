@@ -19,28 +19,34 @@
 
 set -e
 
-export INITIAL_COPYRIGHT_YEAR=2014
+if [ -z "${DEVICE_COMMON}" ]; then
+    echo ""
+    echo "error: This is a script in a common tree. Please execute" $(basename $0) "from a device tree."
+    echo ""
+    exit 1
+fi
 
 # Load extract_utils and do some sanity checks
 MY_DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "$MY_DIR" ]]; then MY_DIR="$PWD"; fi
 
-CM_ROOT="$MY_DIR"/../../..
+ANDROID_ROOT="${MY_DIR}/../../.."
 
-HELPER="$CM_ROOT"/vendor/lineage/build/tools/extract_utils.sh
-if [ ! -f "$HELPER" ]; then
-    echo "Unable to find helper script at $HELPER"
+HELPER="${ANDROID_ROOT}/tools/extract-utils/extract_utils.sh"
+if [ ! -f "${HELPER}" ]; then
+    echo "Unable to find helper script at ${HELPER}"
     exit 1
 fi
-. "$HELPER"
+source "${HELPER}"
 
-# Initialize the helper for common device
-setup_vendor "$DEVICE_COMMON" "$VENDOR" "$CM_ROOT" true
+# Initialize the helper for common
+setup_vendor "${DEVICE_COMMON}" "${VENDOR}" "${ANDROID_ROOT}" true
 
 # Copyright headers and common guards
 write_headers "klte klteactivexx kltechn kltechnduo klteduos kltedv kltekdi kltekor kltespr kltesprsports klteusc kltevzw"
 
-write_makefiles "$MY_DIR"/common-proprietary-files.txt
+# The standard common blobs
+write_makefiles "${MY_DIR}/common-proprietary-files.txt" true
 
 echo "ifeq (\$(strip \$(BOARD_NFC_CHIPSET)),pn547)" >> "$ANDROIDMK"
 write_makefiles "$MY_DIR"/common-proprietary-files-pn547.txt
@@ -64,4 +70,6 @@ done
 
 write_footers
 
-./../msm8974-common/setup-makefiles.sh $@
+export BOARD_COMMON=msm8974-common
+
+"./../../${VENDOR}/${BOARD_COMMON}/setup-makefiles.sh" "$@"

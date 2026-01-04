@@ -45,6 +45,14 @@
     <!-- Enable Doze and App Standby -->
     <bool name="config_enableAutoPowerModes">true</bool>
 
+    <!-- Whether to cleanup fingerprints upon connection to the daemon and when
+         user switches -->
+    <bool name="config_cleanupUnusedFingerprints">false</bool>
+
+    <!-- Whether to notify fingerprint client of successful cancelled authentication
+         (needed for some older vendor fingerprint HAL implementations) -->
+    <bool name="config_notifyClientOnFingerprintCancelSuccess">true</bool>
+
     <!-- Support double tap to wake -->
     <bool name="config_supportDoubleTapWake">true</bool>
 

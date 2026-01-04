@@ -108,7 +108,7 @@ extern "C" {
 #define MAX_BANDS 8
 #define MAX_CHANNELS 32
 #define MAX_RADIO_ACCESS_NETWORKS 8
-
+#define MAX_BROADCAST_SMS_CONFIG_INFO 25
 
 typedef void * RIL_Token;
 
@@ -695,6 +695,8 @@ typedef struct {
     int             toa;         /* "type" from TS 27.007 7.11 */
     char *          number;      /* "number" from TS 27.007 7.11. May be NULL */
     int             timeSeconds; /* for CF no reply only */
+    char *          startTime;   /* SEC addition */
+    char *          endTime;     /* SEC addition */
 }RIL_CallForwardInfo;
 
 typedef struct {
